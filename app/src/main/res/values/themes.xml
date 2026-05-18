@@ -5,5 +5,6 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.SmartNotesPro" parent="Base.Theme.SmartNotesPro" />
+    <style name="Theme.SmartNotesPro" parent="Theme.Material3.DayNight.NoActionBar" />
+
 </resources>
