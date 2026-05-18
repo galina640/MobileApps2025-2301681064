@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("id", note.id)
             intent.putExtra("title", note.title)
             intent.putExtra("content", note.content)
+            intent.putExtra("category", note.category)
 
             startActivity(intent)
         }
