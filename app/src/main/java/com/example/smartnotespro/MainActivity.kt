@@ -1,46 +1,49 @@
 package com.example.smartnotespro
 
-import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.smartnotespro.databinding.ActivityMainBinding
-import com.example.smartnotespro.ui.home.NoteAdapter
-import com.example.smartnotespro.viewmodel.NoteViewModel
 import android.content.Intent
-import com.example.smartnotespro.ui.addedit.AddNoteActivity
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
+import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.smartnotespro.databinding.ActivityMainBinding
+import com.example.smartnotespro.ui.addedit.AddNoteActivity
+import com.example.smartnotespro.ui.addedit.EditNoteActivity
+import com.example.smartnotespro.ui.home.NoteAdapter
+import com.example.smartnotespro.viewmodel.NoteViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val viewModel: NoteViewModel
-            by viewModels()
+    private val viewModel: NoteViewModel by viewModels()
 
     private lateinit var adapter: NoteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding =
-            ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
 
+        // Toolbar
+        setSupportActionBar(binding.toolbar)
+
+        // Adapter
         adapter = NoteAdapter { note ->
 
             val intent = Intent(
                 this,
-                com.example.smartnotespro
-                    .ui.addedit.EditNoteActivity::class.java
+                EditNoteActivity::class.java
             )
 
             intent.putExtra("id", note.id)
@@ -50,11 +53,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // RecyclerView
         binding.recyclerView.layoutManager =
             LinearLayoutManager(this)
 
         binding.recyclerView.adapter = adapter
 
+        // Swipe delete visuals
         val deleteIcon: Drawable? =
             ContextCompat.getDrawable(
                 this,
@@ -64,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         val swipeBackground =
             ColorDrawable(Color.parseColor("#D32F2F"))
 
+        // Swipe delete
         ItemTouchHelper(
 
             object : ItemTouchHelper.SimpleCallback(
@@ -93,6 +99,7 @@ class MainActivity : AppCompatActivity() {
                         viewModel.delete(note)
                     }
                 }
+
                 override fun onChildDraw(
                     c: Canvas,
                     recyclerView: RecyclerView,
@@ -158,9 +165,12 @@ class MainActivity : AppCompatActivity() {
 
         ).attachToRecyclerView(binding.recyclerView)
 
+        // Observe notes
         viewModel.allNotes.observe(this) { notes ->
             adapter.setData(notes)
         }
+
+        // Add button
         binding.fabAdd.setOnClickListener {
 
             startActivity(
@@ -170,6 +180,8 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         }
+
+        // Search
         binding.searchView.setOnQueryTextListener(
 
             object : SearchView.OnQueryTextListener {
@@ -197,5 +209,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         )
+        binding.themeSwitch.setOnCheckedChangeListener {
+
+                _, isChecked ->
+
+            if (isChecked) {
+
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_YES
+                )
+
+            } else {
+
+                AppCompatDelegate.setDefaultNightMode(
+                    AppCompatDelegate.MODE_NIGHT_NO
+                )
+            }
+        }
     }
+
 }

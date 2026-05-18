@@ -14,7 +14,16 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
             android:title="Smart Notes Pro"/>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/themeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dark Mode"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"/>
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
