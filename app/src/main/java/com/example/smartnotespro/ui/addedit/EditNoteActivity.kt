@@ -1,5 +1,6 @@
 package com.example.smartnotespro.ui.addedit
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -26,7 +27,6 @@ class EditNoteActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        // Categories
         val categories = listOf(
             "Personal",
             "Work",
@@ -34,15 +34,15 @@ class EditNoteActivity : AppCompatActivity() {
             "Ideas"
         )
 
-        val adapter = ArrayAdapter(
+        val spinnerAdapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
             categories
         )
 
-        binding.spinnerCategory.adapter = adapter
+        binding.spinnerCategory.adapter =
+            spinnerAdapter
 
-        // Get data
         val title =
             intent.getStringExtra("title")
 
@@ -55,25 +55,22 @@ class EditNoteActivity : AppCompatActivity() {
         noteId =
             intent.getIntExtra("id", 0)
 
-        // Set old values
         binding.editTitle.setText(title)
 
         binding.editContent.setText(content)
 
-        // Show current category
-        val position =
+        val categoryPosition =
             categories.indexOf(category)
 
-        if (position >= 0) {
+        if (categoryPosition >= 0) {
+
             binding.spinnerCategory
-                .setSelection(position)
+                .setSelection(categoryPosition)
         }
 
-        // Change button text
         binding.buttonSave.text =
             "Update Note"
 
-        // Update note
         binding.buttonSave.setOnClickListener {
 
             val updatedTitle =
@@ -86,36 +83,57 @@ class EditNoteActivity : AppCompatActivity() {
                 binding.spinnerCategory
                     .selectedItem.toString()
 
-            if (updatedTitle.isNotEmpty()
-                && updatedContent.isNotEmpty()
-            ) {
+            val updatedNote = Note(
+                id = noteId,
+                title = updatedTitle,
+                content = updatedContent,
+                category = updatedCategory,
+                date = System.currentTimeMillis()
+            )
 
-                val updatedNote = Note(
-                    id = noteId,
-                    title = updatedTitle,
-                    content = updatedContent,
-                    category = updatedCategory,
-                    date = System.currentTimeMillis()
+            viewModel.update(updatedNote)
+
+            Toast.makeText(
+                this,
+                "Note Updated",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            finish()
+        }
+
+        // SHARE NOTE
+        binding.buttonShare.setOnClickListener {
+
+            val shareText =
+
+                "Title: ${binding.editTitle.text}\n\n" +
+
+                        "Content:\n${binding.editContent.text}\n\n" +
+
+                        "Category: ${
+                            binding.spinnerCategory.selectedItem
+                        }"
+
+            val shareIntent = Intent().apply {
+
+                action = Intent.ACTION_SEND
+
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    shareText
                 )
 
-                viewModel.update(updatedNote)
-
-                Toast.makeText(
-                    this,
-                    "Note Updated",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                finish()
-
-            } else {
-
-                Toast.makeText(
-                    this,
-                    "Fill all fields",
-                    Toast.LENGTH_SHORT
-                ).show()
+                type = "text/plain"
             }
+
+            startActivity(
+
+                Intent.createChooser(
+                    shareIntent,
+                    "Share Note"
+                )
+            )
         }
     }
 }

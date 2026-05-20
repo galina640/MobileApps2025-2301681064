@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("title", note.title)
             intent.putExtra("content", note.content)
             intent.putExtra("category", note.category)
+            intent.putExtra("category", note.category)
 
             startActivity(intent)
         }
