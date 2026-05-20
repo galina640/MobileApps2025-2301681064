@@ -1,5 +1,6 @@
 package com.example.smartnotespro.ui.home
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -37,15 +38,53 @@ class NoteAdapter(
 
         val current = notes[position]
 
+        // Title
         holder.binding.textTitle.text =
             current.title
 
+        // Content
         holder.binding.textContent.text =
             current.content
 
+        // Category text
         holder.binding.textCategory.text =
             current.category
 
+        // Category colors
+        when (current.category) {
+
+            "Personal" -> {
+                holder.binding.textCategory.setTextColor(
+                    Color.parseColor("#1976D2")
+                )
+            }
+
+            "Work" -> {
+                holder.binding.textCategory.setTextColor(
+                    Color.parseColor("#D32F2F")
+                )
+            }
+
+            "University" -> {
+                holder.binding.textCategory.setTextColor(
+                    Color.parseColor("#388E3C")
+                )
+            }
+
+            "Ideas" -> {
+                holder.binding.textCategory.setTextColor(
+                    Color.parseColor("#7B1FA2")
+                )
+            }
+
+            else -> {
+                holder.binding.textCategory.setTextColor(
+                    Color.parseColor("#757575")
+                )
+            }
+        }
+
+        // Click listener
         holder.itemView.setOnClickListener {
             onItemClick(current)
         }

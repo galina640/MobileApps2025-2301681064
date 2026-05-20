@@ -166,9 +166,26 @@ class MainActivity : AppCompatActivity() {
 
         ).attachToRecyclerView(binding.recyclerView)
 
-        // Observe notes
         viewModel.allNotes.observe(this) { notes ->
+
             adapter.setData(notes)
+
+            if (notes.isEmpty()) {
+
+                binding.imageEmpty.visibility =
+                    android.view.View.VISIBLE
+
+                binding.textEmpty.visibility =
+                    android.view.View.VISIBLE
+
+            } else {
+
+                binding.imageEmpty.visibility =
+                    android.view.View.GONE
+
+                binding.textEmpty.visibility =
+                    android.view.View.GONE
+            }
         }
 
         // Add button

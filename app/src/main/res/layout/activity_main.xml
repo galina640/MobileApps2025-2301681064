@@ -11,11 +11,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <!-- Toolbar -->
+
         <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbar"
             android:title="Smart Notes Pro"/>
+
+        <!-- Dark Mode Switch -->
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/themeSwitch"
@@ -25,6 +29,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"/>
 
+        <!-- Search -->
+
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchView"
             android:layout_width="match_parent"
@@ -32,13 +38,54 @@
             android:queryHint="Search notes..."
             android:layout_margin="12dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <!-- Content Area -->
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+
+            <!-- RecyclerView -->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <!-- Empty State -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageEmpty"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:src="@android:drawable/ic_menu_edit"
+                    android:alpha="0.3"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/textEmpty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No notes yet"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:alpha="0.6"
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
+
+    <!-- Floating Button -->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
